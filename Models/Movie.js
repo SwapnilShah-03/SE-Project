@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const propertiesSchema = mongoose.Schema({
+const movieSchema = mongoose.Schema({
   title: { type: String, unique: true },
   genre: String,
   director: String,
@@ -10,5 +10,5 @@ const propertiesSchema = mongoose.Schema({
   reviews: [{ name: String, review: String }],
 });
 
-const PropertyModel = mongoose.model("property", propertiesSchema);
-export default PropertyModel;
+const MovieModel = mongoose.model("movie", movieSchema);
+export default MovieModel;
