@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
-import clientRouter from "./Routes/Client.js";
-import serverRouter from "./Routes/Server.js";
+import clientrouter from "./Routes/Client.js";
+import serverrouter from "./Routes/Server.js";
 /* setting up server */
 const app = express();
 dotenv.config();
@@ -14,9 +14,6 @@ app.use(cors());
 // app.engine("ejs", ejsMate);
 app.set("views", "views");
 app.set("view engine", "ejs");
-/* setting up database and starting the server 
-  SET YOUR MONGO URL AND PORT IN .env FILE */
-
 mongoose
   .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
@@ -28,9 +25,5 @@ mongoose
     )
   )
   .catch((error) => console.log(error.message));
-
-/* setting up routes */
-
-// set up your routes here
-app.use("/client", clientRouter);
-app.use("/server", serverRouter);
+app.use("/client", clientrouter);
+app.use("/server", serverrouter);

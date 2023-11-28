@@ -2,84 +2,202 @@ import User from "../Models/User.js";
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
-const getUsers = async (req, res) => {
-  try {
-    const users = await User.find();
-    res.status(200).json(users);
-  } catch (error) {
-    res.status(404).json({ message: error.message });
-  }
-};
-
-const createUser = async (req, res) => {
-  const user = req.body;
-  const u = User.findOne({ email: user.email });
-  if (u) {
-    res.status(400).json({ message: "User already exists" });
-  }
-  const newUser = new User(user, bcrypt.hash(user.password, 12));
-  try {
-    await newUser.save();
-    res.status(201).json(newUser);
-  } catch (error) {
-    res.status(409).json({ message: error.message });
-  }
-};
-
-const loginUser = async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const user = User.findOne({ email });
-    if (!user) {
-      res.status(404).json({ message: "User doesn't exist" });
-    }
-    const isPasswordCorrect = bcrypt.compare(password, user.password);
-    if (!isPasswordCorrect) {
-      res.status(400).json({ message: "Invalid credentials" });
-    }
-    const token = jwt.sign({ email: user.email, id: user._id }, "test", {
-      expiresIn: "1h",
+import Poperty from "../Models/Properties.js";
+import Seeker from "../Models/Seeker.js";
+import axios from "axios";
+const booking = async (req, res) => {
+  const url = "http://localhost:3000/server/booking";
+  const data = {
+    sdate: "7/4/23",
+    edate: "10/4/23",
+    propertyName: "New Apartments",
+    name: "Tathagat",
+  };
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((responseData) => {
+      console.log("Response:", responseData);
+    })
+    .catch((error) => {
+      console.error("Error making POST request:", error.message);
     });
-    res.status(200).json({ result: user, token });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
 };
 
-const getUser = async (req, res) => {
-  // const { id } = req.params;
-  // try {
-  //     const user = User.findById(id);
-  //     res.status(200).json(user);
-  // } catch (error) {
-  //     res.status(404).json({ message: error.message });
-  // }
+const addReview = async (req, res) => {
+  // function onsubmit  = (event)=>{
+  //   event.preventDefault();
+  const url = "http://localhost:3000/server/addReview";
+  const data = {
+    propertyName: "New Apartments",
+    name: "Tathagat",
+    review: "Nice Flat",
+  };
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((responseData) => {
+      console.log("Response:", responseData);
+    })
+    .catch((error) => {
+      console.error("Error making POST request:", error.message);
+    });
+  // };
+  // res.render("review");
+};
+
+const search = async (req, res) => {
+  const url = "http://localhost:3000/server/search";
+  fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((responseData) => {
+      console.log("Response:", responseData);
+    })
+    .catch((error) => {
+      console.error("Error making POST request:", error.message);
+    });
+};
+
+const addProperty = async (req, res) => {
+  const url = "http://localhost:3000/server/addProperty";
+  const data = {
+    name: "Angel Apt",
+    propertytype: "2BHK",
+    owner: "Swapnil",
+    rent: 1000,
+    location: "Parel",
+  };
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((responseData) => {
+      console.log("Response:", responseData);
+    })
+    .catch((error) => {
+      console.error("Error making POST request:", error.message);
+    });
   res.render("sample");
 };
 
-const updateUser = async (req, res) => {
-  const { id } = req.params;
-  const user = req.body;
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    res.status(404).json({ message: "No user with that id" });
-  }
-  const updatedUser = await User.findByIdAndUpdate(
-    id,
-    { ...user, id },
-    { new: true }
-  );
-  res.status(200).json(updatedUser);
+const dates = async (req, res) => {
+  const url = "http://localhost:3000/server/dates";
+  const data = {
+    sdate: "8/4/23",
+    edate: "11/4/23",
+    propertyName: "New Apartments",
+  };
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((responseData) => {
+      console.log("Response:", responseData);
+    })
+    .catch((error) => {
+      console.error("Error making POST request:", error.message);
+    });
 };
 
-const deleteUser = async (req, res) => {
-  const { id } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    res.status(404).json({ message: "No user with that id" });
-  }
-  await User.findByIdAndRemove(id);
-  res.status(200).json({ message: "User deleted successfully" });
+const addSeeker = async (req, res) => {
+  const url = "http://localhost:3000/server/addSeeker";
+  const data = {
+    name: "Tathagat",
+  };
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((responseData) => {
+      console.log("Response:", responseData);
+    })
+    .catch((error) => {
+      console.error("Error making POST request:", error.message);
+    });
 };
 
-export { getUsers, createUser, loginUser, getUser, updateUser, deleteUser };
+const filter = async (req, res) => {
+  const url = "http://localhost:3000/server/filter";
+  const data = {
+    location: "Dadar",
+    area: "1BHK",
+  };
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((responseData) => {
+      console.log("Response:", responseData);
+    })
+    .catch((error) => {
+      console.error("Error making POST request:", error.message);
+    });
+};
+
+export { addProperty, addReview, search, booking, dates, addSeeker, filter };

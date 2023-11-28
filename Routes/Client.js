@@ -1,20 +1,21 @@
 import express from "express";
 import {
-  getUsers,
-  createUser,
-  loginUser,
-  getUser,
-  updateUser,
-  deleteUser,
+  addProperty,
+  addReview,
+  search,
+  booking,
+  dates,
+  addSeeker,
+  filter,
 } from "../Controllers/Client.js";
 
 const router = express.Router();
 
-router.get("/", getUsers);
-router.post("/", createUser);
-router.post("/login", loginUser);
-router.get("/:id", getUser);
-router.patch("/:id", updateUser);
-router.delete("/:id", deleteUser);
-
+router.get("/booking", booking);
+router.get("/addReview", addReview);
+router.get("/search", search);
+router.get("/addProperty", addProperty);
+router.get("/dates", dates);
+router.get("/addSeeker", addSeeker);
+router.get("/filter", filter);
 export default router;
