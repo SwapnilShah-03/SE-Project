@@ -2,7 +2,7 @@ import User from "../Models/User.js";
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import Poperty from "../Models/Properties.js";
+import Movie from "../Models/Movie.js";
 import Seeker from "../Models/Seeker.js";
 
 function calculateDaysDifference(startDate, endDate) {
@@ -21,6 +21,7 @@ function parseDateString(dateString) {
 
   return parsedDate;
 }
+
 function isDatePeriodNotPresent(datePeriod, dateRanges) {
   const [periodStartDate, periodEndDate] = datePeriod.map(parseDateString);
   for (const range of dateRanges) {
@@ -38,9 +39,9 @@ function isDatePeriodNotPresent(datePeriod, dateRanges) {
 }
 
 const dateVerification = async (req, res) => {
-  const { sdate, edate, propertyName } = req.body;
+  const { sdate, edate, movieTitle } = req.body;
   if (parseDateString(sdate) && parseDateString(edate)) {
-    const data = await Poperty.findOne({ name: propertyName });
+    const data = await Movie.findOne({ title: movieTitle });
     const bookings = data.bookings;
     const d = [];
     for (const booking of bookings) {
@@ -60,42 +61,42 @@ const dateVerification = async (req, res) => {
 };
 
 const booking = async (req, res) => {
-  const { sdate, edate, propertyName, name } = req.body;
-  const data = await Poperty.findOne({ name: propertyName });
+  const { sdate, edate, movieTitle, title } = req.body;
+  const data = await Movie.findOne({ title: movieTitle });
   const bookings = data.bookings;
   const d = [];
   for (const booking of bookings) {
     d.push(booking);
   }
-  const rent = data.rent;
+  const p = data.price;
   const days =
     calculateDaysDifference(parseDateString(sdate), parseDateString(edate)) + 1;
-  const price = days * rent;
+  const price = days * p;
   const booking = {
     d: [{ sdate: sdate, edate: edate }],
     days: days,
     Price: price,
   };
   d.push(booking);
-  const update = await Poperty.updateOne(
-    { name: propertyName },
+  const update = await Movie.updateOne(
+    { title: movieTitle },
     { $set: { bookings: d } }
   );
-  const seeker = await Seeker.findOne({ name: name });
+  const seeker = await Seeker.findOne({ title: title });
   const sbooking = seeker.bookings;
   const b = [];
   for (const book of sbooking) {
     b.push(book);
   }
   b.push({
-    property: propertyName,
+    property: movieTitle,
     days: days,
     sdate: sdate,
     edate: edate,
     amt: price,
   });
-  const updateseeker = await Poperty.updateOne(
-    { name: name },
+  const updateseeker = await Movie.updateOne(
+    { title: title },
     { $set: { bookings: b } }
   );
   console.log(updateseeker);
@@ -103,26 +104,26 @@ const booking = async (req, res) => {
 };
 
 const search = async (req, res) => {
-  const data = await Poperty.find();
+  const data = await Movie.find();
   res.status(200).json(data);
 };
 
 const filter = async (req, res) => {
-  const { location, area } = req.body;
-  const data = await Poperty.find({ location: location, propertytype: area });
+  const { cinemaLocation, genre } = req.body;
+  const data = await Movie.find({ cinemaLocation: cinemaLocation, genre: genre });
   console.log(data);
   res.json(data);
 };
 
-const addProperty = async (req, res) => {
-  const { name, propertytype, owner, rent, location } = req.body;
-  const portfolio1 = await Poperty.create({
-    name: name,
-    propertytype: propertytype,
-    owner: owner,
+const addMovie = async (req, res) => {
+  const { title, genre, director, price, cinemaLocation } = req.body;
+  const portfolio1 = await Movie.create({
+    title: title,
+    genre: genre,
+    director: director,
     bookings: [],
-    rent: rent,
-    location: location,
+    price: price,
+    cinemaLocation: cinemaLocation,
     reviews: [],
   });
   console.log(portfolio1);
@@ -130,25 +131,25 @@ const addProperty = async (req, res) => {
 };
 
 const addSeeker = async (req, res) => {
-  const { name } = req.body;
+  const { title } = req.body;
   const portfolio1 = await Seeker.create({
-    name: name,
+    title: title,
     bookings: [],
   });
   res.json("Added");
 };
 
 const addReview = async (req, res) => {
-  const { propertyName, name, review } = req.body;
-  const data = await Poperty.findOne({ name: propertyName });
+  const { movieTitle, title, review } = req.body;
+  const data = await Movie.findOne({ title: movieTitle });
   const reviews = data.reviews;
   const d = [];
   for (const review of reviews) {
     d.push(review);
   }
-  d.push({ name: name, review: review });
-  const update = await Poperty.updateOne(
-    { name: propertyName },
+  d.push({ title: title, review: review });
+  const update = await Movie.updateOne(
+    { title: movieTitle },
     { $set: { reviews: d } }
   );
   res.json("Review Added");
@@ -159,7 +160,7 @@ export {
   booking,
   search,
   filter,
-  addProperty,
+  addMovie,
   addSeeker,
   addReview,
 };

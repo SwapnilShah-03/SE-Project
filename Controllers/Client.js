@@ -2,15 +2,16 @@ import User from "../Models/User.js";
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import Poperty from "../Models/Properties.js";
+import Movie from "../Models/Movie.js";
 import Seeker from "../Models/Seeker.js";
 import axios from "axios";
+
 const booking = async (req, res) => {
   const url = "http://localhost:3000/server/booking";
   const data = {
     sdate: "7/4/23",
     edate: "10/4/23",
-    propertyName: "New Apartments",
+    movieTitle: "New Apartments",
     name: "Tathagat",
   };
   fetch(url, {
@@ -39,9 +40,9 @@ const addReview = async (req, res) => {
   //   event.preventDefault();
   const url = "http://localhost:3000/server/addReview";
   const data = {
-    propertyName: "New Apartments",
+    movieTitle: "Black Widow",
     name: "Tathagat",
-    review: "Nice Flat",
+    review: "Bahut achhi movie thi",
   };
   fetch(url, {
     method: "POST",
@@ -87,15 +88,15 @@ const search = async (req, res) => {
       console.error("Error making POST request:", error.message);
     });
 };
-
-const addProperty = async (req, res) => {
-  const url = "http://localhost:3000/server/addProperty";
+// title, genre, director, price, cinemaLocation
+const addMovie = async (req, res) => {
+  const url = "http://localhost:3000/server/addMovie";
   const data = {
-    name: "New Apartments",
-    propertytype: "1BHK",
-    owner: "Swapnil",
-    rent: 5000,
-    location: "Dadar",
+    title: "Black Widow",
+    genre: "Action, Adventure, Sci-Fi",
+    director: "Swapnil",
+    price: 250,
+    cinemaLocation: "Dadar",
   };
   fetch(url, {
     method: "POST",
@@ -124,7 +125,7 @@ const dates = async (req, res) => {
   const data = {
     sdate: "8/4/23",
     edate: "11/4/23",
-    propertyName: "New Apartments",
+    movieTitle: "Black Widow",
   };
   fetch(url, {
     method: "POST",
@@ -176,8 +177,8 @@ const addSeeker = async (req, res) => {
 const filter = async (req, res) => {
   const url = "http://localhost:3000/server/filter";
   const data = {
-    location: "Dadar",
-    area: "1BHK",
+    cinemaLocation: "Dadar",
+    genre: "Action, Adventure, Sci-Fi",
   };
   fetch(url, {
     method: "POST",
@@ -200,4 +201,4 @@ const filter = async (req, res) => {
     });
 };
 
-export { addProperty, addReview, search, booking, dates, addSeeker, filter };
+export { addMovie, addReview, search, booking, dates, addSeeker, filter };

@@ -1,6 +1,6 @@
 import express from "express";
 import {
-  addProperty,
+  addMovie,
   addReview,
   search,
   booking,
@@ -14,7 +14,7 @@ const router = express.Router();
 router.get("/booking", booking);
 router.get("/addReview", addReview);
 router.get("/search", search);
-router.get("/addProperty", addProperty);
+router.get("/addMovie", addMovie);
 router.get("/dates", dates);
 router.get("/addSeeker", addSeeker);
 router.get("/filter", filter);
