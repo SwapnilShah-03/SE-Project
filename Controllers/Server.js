@@ -61,45 +61,23 @@ const dateVerification = async (req, res) => {
 };
 
 const booking = async (req, res) => {
-  const { sdate, edate, movieTitle, title } = req.body;
+  const { movieTitle } = req.body;
   const data = await Movie.findOne({ title: movieTitle });
   const bookings = data.bookings;
   const d = [];
   for (const booking of bookings) {
     d.push(booking);
   }
-  const p = data.price;
-  const days =
-    calculateDaysDifference(parseDateString(sdate), parseDateString(edate)) + 1;
-  const price = days * p;
+
   const booking = {
-    d: [{ sdate: sdate, edate: edate }],
-    days: days,
-    Price: price,
+    seat: 1,
+    Price: data.price,
   };
   d.push(booking);
   const update = await Movie.updateOne(
     { title: movieTitle },
     { $set: { bookings: d } }
   );
-  const seeker = await Seeker.findOne({ title: title });
-  const sbooking = seeker.bookings;
-  const b = [];
-  for (const book of sbooking) {
-    b.push(book);
-  }
-  b.push({
-    property: movieTitle,
-    days: days,
-    sdate: sdate,
-    edate: edate,
-    amt: price,
-  });
-  const updateseeker = await Movie.updateOne(
-    { title: title },
-    { $set: { bookings: b } }
-  );
-  console.log(updateseeker);
   res.json("Booking Done");
 };
 
@@ -110,7 +88,10 @@ const search = async (req, res) => {
 
 const filter = async (req, res) => {
   const { cinemaLocation, genre } = req.body;
-  const data = await Movie.find({ cinemaLocation: cinemaLocation, genre: genre });
+  const data = await Movie.find({
+    cinemaLocation: cinemaLocation,
+    genre: genre,
+  });
   console.log(data);
   res.json(data);
 };

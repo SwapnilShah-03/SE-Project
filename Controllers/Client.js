@@ -9,10 +9,7 @@ import axios from "axios";
 const booking = async (req, res) => {
   const url = "http://localhost:3000/server/booking";
   const data = {
-    sdate: "7/4/23",
-    edate: "10/4/23",
-    movieTitle: "New Apartments",
-    name: "Tathagat",
+    movieTitle: "Black Widow",
   };
   fetch(url, {
     method: "POST",
