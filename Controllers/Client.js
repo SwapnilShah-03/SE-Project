@@ -9,7 +9,7 @@ import axios from "axios";
 const booking = async (req, res) => {
   const url = "http://localhost:3000/server/booking";
   const data = {
-    movieTitle: "Black Widow",
+    movieTitle: "Zindagi Na Milegi Dobara",
   };
   fetch(url, {
     method: "POST",
@@ -37,8 +37,8 @@ const addReview = async (req, res) => {
   //   event.preventDefault();
   const url = "http://localhost:3000/server/addReview";
   const data = {
-    movieTitle: "Black Widow",
-    name: "Tathagat",
+    movieTitle: "The Smurfs",
+    name: "Swapnil",
     review: "Bahut achhi movie thi",
   };
   fetch(url, {
@@ -89,11 +89,11 @@ const search = async (req, res) => {
 const addMovie = async (req, res) => {
   const url = "http://localhost:3000/server/addMovie";
   const data = {
-    title: "Black Widow",
-    genre: "Action, Adventure, Sci-Fi",
-    director: "Swapnil",
-    price: 250,
-    cinemaLocation: "Dadar",
+    title: "The Smurfs",
+    genre: "Animation",
+    director: "Dev",
+    price: 220,
+    cinemaLocation: "Parel",
   };
   fetch(url, {
     method: "POST",
