@@ -1,84 +1,112 @@
-var assert = require("assert");
-// describe('Array', function () {
-//   describe('#indexOf()', function () {
-//     it('should return -1 when the value is not present', function () {
-//       assert.equal([1, 2, 3].indexOf(4), -1);
-//     });
-//   });
-// });
+import chai from "chai";
+import chaiHttp from "chai-http";
 
-const chai = require("chai");
-const chaiHttp = require("chai-http");
 const { expect } = chai;
 
-// Uncomment the following line if you are testing an HTTP server
-// chai.use(chaiHttp);
+chai.use(chaiHttp);
 
-// Import or require the functions to be tested
-const {
-  verifyDate,
-  addReview,
-  updateProperty,
-  addProperty,
-} = require("../sample"); // Update with the correct path
-
-describe("Room Management System Tests", function () {
+describe("Online Room Rental System", function () {
   // Test Date Verification
+
+  describe("Booking", function () {
+    it("Method: post() -> It should successfully book property", (done) => {
+      chai
+        .request("http://localhost:3000/server")
+        .post("/booking")
+        .send({
+          sdate: "7/4/23",
+          edate: "10/4/23",
+          propertyName: "New Apartments",
+          name: "Tathagat",
+        })
+        .end((err, res) => {
+          expect(res.body).to.equal("Booking Done"); // Assuming your response has a 'message' property
+          done();
+        });
+    });
+  });
+
   describe("Date Verification", function () {
-    it("should return true for a valid date", function () {
-      const result = verifyDate("2023-12-01");
-      expect(result).to.be.true;
+    it("Method: post() -> It should return true for the dates", (done) => {
+      chai
+        .request("http://localhost:3000/server")
+        .post("/dates")
+        .send({
+          sdate: "11/2/23",
+          edate: "15/2/23",
+          propertyName: "Angel Apt",
+        })
+        .end((err, res) => {
+          expect(res.body).to.be.true; // Assuming your response has a 'result' property
+          done();
+        });
     });
 
-    it("should return false for an invalid date", function () {
-      const result = verifyDate("invalid-date");
-      expect(result).to.be.false;
+    it("Method: post() -> It should return false for the dates", (done) => {
+      chai
+        .request("http://localhost:3000/server")
+        .post("/dates")
+        .send({
+          sdate: "8/4/23",
+          edate: "11/4/23",
+          propertyName: "New Apartments",
+        })
+        .end((err, res) => {
+          expect(res.body).to.be.false; // Assuming your response has a 'result' property
+          done();
+        });
     });
   });
 
   // Test Adding Review
   describe("Add Review", function () {
-    it("should add a review successfully", function () {
-      const propertyId = "some-property-id";
-      const review = "This is a great place!";
-      const result = addReview(propertyId, review);
-      // Assuming addReview returns some confirmation or status
-      expect(result).to.equal("Review added successfully");
-    });
-  });
-
-  // Test Updating Property
-  describe("Update Property", function () {
-    it("should update property details successfully", function () {
-      const propertyId = "some-property-id";
-      const updatedDetails = { name: "Updated Property", price: 150 };
-      const result = updateProperty(propertyId, updatedDetails);
-      // Assuming updateProperty returns some confirmation or status
-      expect(result).to.equal("Property updated successfully");
+    it("Method: post() -> It should successfully add property", (done) => {
+      chai
+        .request("http://localhost:3000/server")
+        .post("/addReview")
+        .send({
+          propertyName: "Angel Apt",
+          name: "Dev",
+          review: "Nice Flat",
+        })
+        .end((err, res) => {
+          expect(res.body).to.equal("Review Added"); // Assuming your response has a 'message' property
+          done();
+        });
     });
   });
 
   // Test Adding Property
   describe("Add Property", function () {
-    it("should add a new property successfully", function () {
-      const newProperty = { name: "New Property", price: 200 };
-      const result = addProperty(newProperty);
-      // Assuming addProperty returns some confirmation or status
-      expect(result).to.equal("Property added successfully");
+    it("Method: post() -> It should successfully add property", (done) => {
+      chai
+        .request("http://localhost:3000/server")
+        .post("/addProperty")
+        .send({
+          name: "Shanti Apt",
+          propertytype: "2BHK",
+          owner: "Swapnil",
+          rent: 12000,
+          location: "Borivali",
+        })
+        .end((err, res) => {
+          expect(res.body).to.equal("Property Added Succesfully"); // Assuming your response has a 'message' property
+          done();
+        });
     });
   });
 
-  // If testing an HTTP server, you can include tests for API endpoints using chai-http
-  // Example:
-  // describe('API Tests', function () {
-  //   it('should return a list of properties', function (done) {
-  //     chai.request('http://localhost:3000') // Update with your server URL
-  //       .get('/api/properties')
-  //       .end(function (err, res) {
-  //         expect(res).to.have.status(200);
-  //         expect(res.body).to.be.an('array');
-  //         done();
-  //       });
-  //   });
-  // });
+  // Test Searching Property
+  describe("Testing Search Property", () => {
+    it("Method: get() -> It should give property list", (done) => {
+      chai
+        .request("http://localhost:3000/server")
+        .get("/search")
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          // Add more assertions based on your actual response structure
+          done();
+        });
+    });
+  });
 });

@@ -91,11 +91,11 @@ const search = async (req, res) => {
 const addProperty = async (req, res) => {
   const url = "http://localhost:3000/server/addProperty";
   const data = {
-    name: "Angel Apt",
-    propertytype: "2BHK",
+    name: "New Apartments",
+    propertytype: "1BHK",
     owner: "Swapnil",
-    rent: 1000,
-    location: "Parel",
+    rent: 5000,
+    location: "Dadar",
   };
   fetch(url, {
     method: "POST",

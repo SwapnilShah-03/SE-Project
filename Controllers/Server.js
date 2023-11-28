@@ -99,12 +99,12 @@ const booking = async (req, res) => {
     { $set: { bookings: b } }
   );
   console.log(updateseeker);
-  res.json("Added");
+  res.json("Booking Done");
 };
 
 const search = async (req, res) => {
   const data = await Poperty.find();
-  res.json(data);
+  res.status(200).json(data);
 };
 
 const filter = async (req, res) => {
@@ -126,6 +126,7 @@ const addProperty = async (req, res) => {
     reviews: [],
   });
   console.log(portfolio1);
+  res.json("Property Added Succesfully");
 };
 
 const addSeeker = async (req, res) => {
