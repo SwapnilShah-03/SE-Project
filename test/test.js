@@ -14,7 +14,7 @@ describe("Online Room Rental System", function () {
         .request("http://localhost:3000/server")
         .post("/booking")
         .send({
-          movieTitle: "Zindagi Na Milegi Dobara",
+          movieTitle: "The Smurfs",
         })
         .end((err, res) => {
           expect(res.body).to.equal("Booking Done"); // Assuming your response has a 'message' property
@@ -30,8 +30,8 @@ describe("Online Room Rental System", function () {
         .request("http://localhost:3000/server")
         .post("/addReview")
         .send({
-          movieTitle: "The Smurfs",
-          name: "Tathagat",
+          movieTitle: "Black Widow",
+          name: "Aryan",
           review: "Nice Movie!!",
         })
         .end((err, res) => {
@@ -46,7 +46,7 @@ describe("Online Room Rental System", function () {
     it("Method: post() -> It should successfully add Movie", (done) => {
       chai
         .request("http://localhost:3000/server")
-        .post("/addProperty")
+        .post("/addMovie")
         .send({
           title: "Baaghi 2",
           genre: "Comedy",
